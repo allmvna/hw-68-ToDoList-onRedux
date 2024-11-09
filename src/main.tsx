@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import 'react-toastify/dist/ReactToastify.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import {Provider} from "react-redux";
