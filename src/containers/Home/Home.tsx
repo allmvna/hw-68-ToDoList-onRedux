@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid2";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
-import {addTask, fetchData, toggleTaskStatus} from "../slices/taskSlice.ts";
+import {addTask, deleteTask, fetchData, toggleTaskStatus} from "../slices/taskSlice.ts";
 
 
 const Home = () => {
@@ -27,6 +27,10 @@ const Home = () => {
 
     const handleStatusChange = (id: string, currentStatus: boolean) => {
         dispatch(toggleTaskStatus({ id, status: !currentStatus }));
+    };
+
+    const deleteTaskHandler = (id: string) => {
+        dispatch(deleteTask(id));
     };
 
     return (
@@ -104,7 +108,12 @@ const Home = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="medium" variant="contained" color="error">
+                                    <Button
+                                        size="medium"
+                                        variant="contained"
+                                        color="error"
+                                        onClick={() => deleteTaskHandler(task.id)}
+                                    >
                                         <RemoveCircleOutlineIcon />
                                     </Button>
                                 </CardActions>

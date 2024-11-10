@@ -51,6 +51,13 @@ export const toggleTaskStatus = createAsyncThunk(
     }
 );
 
+export const deleteTask = createAsyncThunk(
+    'task/deleteTask',
+    async (id: string) => {
+        await axiosAPI.delete(`/tasks/${id}.json`);
+        return id;
+    }
+);
 
 export const taskSlice = createSlice({
     name: 'task',
@@ -78,6 +85,9 @@ export const taskSlice = createSlice({
                 if (task) {
                     task.status = action.payload.status;
                 }
+            })
+            .addCase(deleteTask.fulfilled, (state, action) => {
+                state.tasks = state.tasks.filter((task) => task.id !== action.payload);
             });
 
     },
