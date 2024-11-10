@@ -1,9 +1,10 @@
-import {Button, Container, TextField, Typography} from "@mui/material";
+import {Button, Card, CardActions, CardContent, Checkbox, Container, TextField, Typography} from "@mui/material";
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Grid from "@mui/material/Grid2";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
-import {addTask, fetchData} from "../slices/taskSlice.ts";
+import {addTask, fetchData, toggleTaskStatus} from "../slices/taskSlice.ts";
 
 
 const Home = () => {
@@ -22,6 +23,10 @@ const Home = () => {
             dispatch(addTask(taskTitle));
             setTaskTitle("");
         }
+    };
+
+    const handleStatusChange = (id: string, currentStatus: boolean) => {
+        dispatch(toggleTaskStatus({ id, status: !currentStatus }));
     };
 
     return (
@@ -71,6 +76,42 @@ const Home = () => {
                         </Grid>
                     </Grid>
                 </form>
+                <Grid container spacing={2} sx={{ mt: 2 }}>
+                    {tasks.map((task) => (
+                        <Grid size={12} key={task.id}>
+                            <Card
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    backgroundColor: "white",
+                                    border: "2px solid",
+                                    borderColor: task.status ? "green" : "red",
+                                    borderRadius: "10px",
+                                    p: 1,
+                                }}
+                            >
+                                <Checkbox
+                                    checked={task.status}
+                                    onChange={() => handleStatusChange(task.id, task.status)}
+                                    sx={{ ml: 1 }}
+                                />
+                                <CardContent sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+                                    <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                                        Task: {task.title}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        {task.status ? "Done" : "Not done"}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size="medium" variant="contained" color="error">
+                                        <RemoveCircleOutlineIcon />
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
             </Container>
         </>
     );
