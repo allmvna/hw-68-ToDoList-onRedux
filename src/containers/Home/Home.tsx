@@ -1,14 +1,17 @@
-import {Button, Card, CardActions, CardContent, Checkbox, Container, TextField, Typography} from "@mui/material";
+import {Alert, Button, Card, CardActions, CardContent, Checkbox, Container, TextField, Typography} from "@mui/material";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Grid from "@mui/material/Grid2";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../app/store.ts";
 import React, {useEffect, useState} from "react";
 import {addTask, deleteTask, fetchData, toggleTaskStatus} from "../slices/taskSlice.ts";
+import Spinner from "../../UI/Spinner/Spinner.tsx";
 
 
 const Home = () => {
     const [taskTitle, setTaskTitle] = useState("");
+    const isLoading = useSelector((state: RootState) => state.task.isLoading);
+    const error = useSelector((state: RootState) => state.task.error);
     const tasks = useSelector((state: RootState) => state.task.tasks);
     const dispatch: AppDispatch = useDispatch();
 
@@ -80,6 +83,9 @@ const Home = () => {
                         </Grid>
                     </Grid>
                 </form>
+                {isLoading ? (
+                    <Spinner/>
+                    ) : (
                 <Grid container spacing={2} sx={{ mt: 2 }}>
                     {tasks.map((task) => (
                         <Grid size={12} key={task.id}>
@@ -121,6 +127,11 @@ const Home = () => {
                         </Grid>
                     ))}
                 </Grid>
+                )}
+
+                {error && (
+                        <Alert severity='error'>There was an error loading tasks!</Alert>
+                )}
             </Container>
         </>
     );
